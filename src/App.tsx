@@ -1,4 +1,5 @@
-import { Configurator } from './components/configurator';
+import { Experience } from '@/components/experience';
+import { Configurator } from '@/components/configurator';
 
 function App() {
   return (
@@ -9,7 +10,9 @@ function App() {
         </button>
       </div>
 
-      <div className="w-[100vw] h-[100vw] xl:w-[calc(100vh-440px)] xl:h-[calc(100vh-440px)] mx-auto" />
+      <div className="w-[100vw] h-[100vw] xl:w-[calc(100vh-440px)] xl:h-[calc(100vh-440px)] mx-auto">
+        <Experience />
+      </div>
 
       <Configurator />
     </div>

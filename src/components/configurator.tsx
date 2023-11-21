@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { range } from 'lodash';
 
-import { cn } from '../lib/utils';
+import { cn } from '@/lib/utils';
 
 const previews = [
   { label: 'Expression', key: 'face', total: 12 },
