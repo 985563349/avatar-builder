@@ -21,7 +21,7 @@ const Configurator: React.FC = () => {
   const preview = previews.find(({ key }) => key === active)!;
 
   return (
-    <div className="relative mx-auto max-w-5xl">
+    <div className="relative mx-auto max-w-7xl">
       <div className="absolute -top-20 space-x-2">
         <button
           className={cn(
@@ -64,12 +64,12 @@ const Configurator: React.FC = () => {
         </div>
 
         <div className="px-4 pb-4">
-          <ul className="grid grid-cols-3 md:grid-cols-6 xl:grid-cols-9 gap-6">
+          <ul className="grid grid-cols-3 md:grid-cols-8 lg:grid-cols-12 gap-6">
             {range(1, preview.total + 1).map((value) => {
               const src = `/previews/${color}/${active}/${value}.png`;
 
               return (
-                <li className="relative pb-[100%] h-0 cursor-pointer" key={src}>
+                <li className="relative aspect-square cursor-pointer" key={src}>
                   <span className="transition-colors absolute inset-0 border-4 border-gray-200 hover:border-teal-500 hover:shadow-[inset_0_0_0_4px_#ffffff] rounded-lg w-full h-full bg-gray-200" />
                   <img
                     className="absolute inset-0 w-full h-full pointer-events-none"
