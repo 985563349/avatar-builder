@@ -1,13 +1,12 @@
 import { useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { Perf } from 'r3f-perf';
 
 import { Model } from '@/components/model';
 
-const polarAngle = Math.PI / 2;
-const azimuthAngle = Math.PI / 4;
+const POLAR_ANGLE = Math.PI / 2;
+const AZIMUTH_ANGLE = Math.PI / 4;
 
-const Scene: React.FC = () => {
+const Experience: React.FC = () => {
   useFrame(({ gl, camera }) => {
     const zoom = gl.domElement.clientWidth / 3;
 
@@ -19,15 +18,13 @@ const Scene: React.FC = () => {
 
   return (
     <>
-      <Perf position="top-left" />
-
       <OrbitControls
         enablePan={false}
         enableZoom={false}
-        minPolarAngle={polarAngle}
-        maxPolarAngle={polarAngle}
-        minAzimuthAngle={-azimuthAngle}
-        maxAzimuthAngle={azimuthAngle}
+        minPolarAngle={POLAR_ANGLE}
+        maxPolarAngle={POLAR_ANGLE}
+        minAzimuthAngle={-AZIMUTH_ANGLE}
+        maxAzimuthAngle={AZIMUTH_ANGLE}
       />
 
       <ambientLight color={0xffffff} intensity={0.6} />
@@ -75,6 +72,4 @@ const Scene: React.FC = () => {
   );
 };
 
-Scene.displayName = 'Experience';
-
-export { Scene };
+export { Experience };

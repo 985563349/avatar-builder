@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import { range } from 'lodash';
 
+import { useCustomization, type CustomizationProviderState } from '@/providers/customization';
 import { cn } from '@/lib/utils';
 
-const previews = [
-  { label: 'Expression', key: 'face', total: 12 },
-  { label: 'Head', key: 'hair', total: 12 },
+type ConfigKey = Exclude<keyof CustomizationProviderState, 'theme'>;
+
+interface Config {
+  label: string;
+  key: ConfigKey;
+  total: number;
+}
+
+const configs: Config[] = [
+  { label: 'Expression', key: 'expression', total: 12 },
+  { label: 'Hair', key: 'hair', total: 12 },
   { label: 'Eyebrows', key: 'eyebrows', total: 8 },
   { label: 'Sunglasses', key: 'sunglasses', total: 12 },
   { label: 'Clothes', key: 'clothes', total: 12 },
@@ -15,10 +23,10 @@ const previews = [
 ];
 
 const Configurator: React.FC = () => {
-  const [active, setActive] = useState('face');
-  const [color, setColor] = useState('light');
+  const { theme, setCustomization, ...customization } = useCustomization();
 
-  const preview = previews.find(({ key }) => key === active)!;
+  const [active, setActive] = useState<ConfigKey>('expression');
+  const config = configs.find(({ key }) => key === active)!;
 
   return (
     <div className="relative mx-auto max-w-7xl">
@@ -27,10 +35,10 @@ const Configurator: React.FC = () => {
           className={cn(
             'transition-colors border-4 border-white hover:border-teal-500 p-1 rounded-xl bg-white',
             {
-              'border-teal-500': color === 'light',
+              'border-teal-500': theme === 'light',
             }
           )}
-          onClick={() => setColor('light')}
+          onClick={() => setCustomization('theme', 'light')}
         >
           <span className="block rounded-md w-7 h-7 bg-gradient-to-br from-orange-200 to-orange-300" />
         </button>
@@ -39,18 +47,18 @@ const Configurator: React.FC = () => {
           className={cn(
             'transition-colors border-4 border-white hover:border-teal-500 p-1 rounded-xl bg-white',
             {
-              'border-teal-500': color === 'dark',
+              'border-teal-500': theme === 'dark',
             }
           )}
-          onClick={() => setColor('dark')}
+          onClick={() => setCustomization('theme', 'dark')}
         >
           <span className="block rounded-md w-7 h-7 bg-gradient-to-br from-yellow-700 to-yellow-900" />
         </button>
       </div>
 
       <div className="rounded-xl p-2 bg-white">
-        <div className="p-4 mb-2 space-x-10 whitespace-nowrap overflow-x-auto">
-          {previews.map(({ label, key }) => (
+        <div className="flex items-center gap-x-10 p-4 mb-2 whitespace-nowrap overflow-x-auto">
+          {configs.map(({ label, key }) => (
             <button
               className={cn('transition-colors text-gray-500 hover:text-teal-500', {
                 'text-teal-500': active === key,
@@ -65,16 +73,30 @@ const Configurator: React.FC = () => {
 
         <div className="px-4 pb-4">
           <ul className="grid grid-cols-3 md:grid-cols-8 lg:grid-cols-12 gap-6">
-            {range(1, preview.total + 1).map((value) => {
-              const src = `/previews/${color}/${active}/${value}.png`;
+            {[...Array(config.total)].map((_, i) => {
+              const option = i + 1;
+              const src = `/previews/${theme}/${active}/${option}.png`;
+              const alt = `${theme}-${active}-${option}`;
 
               return (
-                <li className="relative aspect-square cursor-pointer" key={src}>
-                  <span className="transition-colors absolute inset-0 border-4 border-gray-200 hover:border-teal-500 hover:shadow-[inset_0_0_0_4px_#ffffff] rounded-lg w-full h-full bg-gray-200" />
+                <li
+                  className="relative aspect-square cursor-pointer"
+                  key={alt}
+                  onClick={() => setCustomization(active, option)}
+                >
+                  <span
+                    className={cn(
+                      'transition-colors absolute inset-0 border-4 border-gray-200 hover:border-teal-500 hover:shadow-[inset_0_0_0_4px_#ffffff] rounded-lg w-full h-full bg-gray-200',
+                      {
+                        'border-teal-500 shadow-[inset_0_0_0_4px_#ffffff]':
+                          customization[active] === option,
+                      }
+                    )}
+                  />
                   <img
                     className="absolute inset-0 w-full h-full pointer-events-none"
                     src={src}
-                    alt={`${active}-${value}`}
+                    alt={alt}
                   />
                 </li>
               );
