@@ -26,7 +26,7 @@ interface CustomizationProviderContextType extends CustomizationProviderState {
 const initialState: CustomizationProviderState = {
   theme: 'light',
   expression: 1,
-  hair: 1,
+  hair: 2,
   eyebrows: 1,
   sunglasses: 1,
   clothes: 1,
