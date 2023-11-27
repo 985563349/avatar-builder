@@ -1,10 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-export interface CustomizationProviderProps {
-  children: React.ReactNode;
-}
-
-export interface CustomizationProviderState {
+type Customization = {
   theme: 'light' | 'dark';
   expression: number;
   hair: number;
@@ -14,36 +10,32 @@ export interface CustomizationProviderState {
   necklace: number;
   earrings: number;
   tattoo: number;
-}
-
-interface CustomizationProviderContextType extends CustomizationProviderState {
-  setCustomization: <P extends keyof CustomizationProviderState>(
-    prop: P,
-    value: CustomizationProviderState[P]
-  ) => void;
-}
-
-const initialState: CustomizationProviderState = {
-  theme: 'light',
-  expression: 1,
-  hair: 2,
-  eyebrows: 1,
-  sunglasses: 1,
-  clothes: 1,
-  necklace: 1,
-  earrings: 1,
-  tattoo: 1,
 };
 
-const CustomizationProviderContext = createContext<CustomizationProviderContextType>({
-  ...initialState,
-  setCustomization: () => null,
-});
+export interface CustomizationProviderProps {
+  children: React.ReactNode;
+}
+
+interface CustomizationProviderState extends Customization {
+  setCustomization: <P extends keyof Customization>(prop: P, value: Customization[P]) => void;
+}
+
+const CustomizationProviderContext = createContext<CustomizationProviderState | null>(null);
 
 export function CustomizationProvider({ children }: CustomizationProviderProps) {
-  const [customization, setCustomization] = useState(initialState);
+  const [customization, setCustomization] = useState({
+    theme: 'light' as const,
+    expression: 1,
+    hair: 2,
+    eyebrows: 1,
+    sunglasses: 1,
+    clothes: 1,
+    necklace: 1,
+    earrings: 1,
+    tattoo: 1,
+  });
 
-  const value: CustomizationProviderContextType = {
+  const value: CustomizationProviderState = {
     ...customization,
     setCustomization: (prop, value) => setCustomization((props) => ({ ...props, [prop]: value })),
   };

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { useCustomization, type CustomizationProviderState } from '@/providers/customization';
+import { useCustomization } from '@/providers/customization';
 import { cn } from '@/lib/utils';
 
-type ConfigKey = Exclude<keyof CustomizationProviderState, 'theme'>;
+type ConfigKey = Exclude<keyof ReturnType<typeof useCustomization>, 'theme' | 'setCustomization'>;
 
 interface Config {
   label: string;
@@ -24,8 +24,8 @@ const configs: Config[] = [
 
 const Configurator: React.FC = () => {
   const { theme, setCustomization, ...customization } = useCustomization();
-
   const [active, setActive] = useState<ConfigKey>('expression');
+
   const config = configs.find(({ key }) => key === active)!;
 
   return (
